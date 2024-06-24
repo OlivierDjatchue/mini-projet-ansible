@@ -1,0 +1,4 @@
+---
+# defaults file for install-apache
+
+system_user: ec2-user

@@ -1,0 +1,26 @@
+---
+# tasks file for install-apache
+
+- name: Install required packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  when: ansible_distribution == "CentOS"
+  loop:
+    - wget
+    - git
+
+- name: Copy website file template
+  template:
+    src: index.html.j2
+    dest: "/home/{{ system_user }}/index.html"
+
+- name: Create Apache container
+  docker_container:
+    name: webapp
+    image: httpd
+    ports:
+      - "82:80"
+    volumes:
+      - "/home/{{ system_user }}/index.html:/usr/local/apache2/htdocs/index.html"
+

@@ -1,0 +1,8 @@
+---
+- name: Apache installation using docker
+  hosts: prod
+  become: true
+
+
+  roles:
+    - install-apache
