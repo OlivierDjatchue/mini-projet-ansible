@@ -1,15 +1,6 @@
 ---
 # tasks file for install-apache
 
-- name: Install required packages
-  yum:
-    name: "{{ item }}"
-    state: present
-  when: ansible_distribution == "CentOS"
-  loop:
-    - wget
-    - git
-
 - name: Copy website file template
   template:
     src: index.html.j2
