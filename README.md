@@ -109,12 +109,12 @@ The playbook is executed to run the above roles in sequence, ensuring the Apache
 5.  **Verification:**
     
     -   Check that the playbook ran successfully using the provided screenshots.
-  >![playbook](https://github.com/user-attachments/assets/d0786f46-a7f0-4fea-a75e-7ff5f9fb18c2)
+>![playbook](https://github.com/user-attachments/assets/d0786f46-a7f0-4fea-a75e-7ff5f9fb18c2)
     -   Verify the Apache container is running and listening on port 82.
-   >![docker_running](https://github.com/user-attachments/assets/0ed7df57-a5ce-49b7-9e21-a74cf5c6cf37)
+>![docker_running](https://github.com/user-attachments/assets/0ed7df57-a5ce-49b7-9e21-a74cf5c6cf37)
 
     -   Access the website and ensure it is served correctly.
- >![Website](https://github.com/user-attachments/assets/1eb567cd-b146-48e9-a215-c454d2d03488)
+>![Website](https://github.com/user-attachments/assets/1eb567cd-b146-48e9-a215-c454d2d03488)
 
 ## Learning Outcomes
 
