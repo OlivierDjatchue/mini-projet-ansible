@@ -8,45 +8,116 @@
 
 # Ansible Apache Installation Project
 
-## Overview
-
-This project automates the installation and configuration of an Apache server using Ansible. It includes setting up necessary prerequisites, configuring an Ansible role with a Jinja2 template, deploying an Apache container, and implementing security measures.
-
-## Steps
-
-1. **Prerequisites Installation**:
-   - Install `python-pip`, `git`, and `epel-release` using pretasks.
-
-2. **Role and Template Setup**:
-   - Create an Ansible role to manage Apache installation and configuration.
-   - Integrate a Jinja2 template file (`index.html.j2`) for the Apache default page.
-
-3. **Apache Container Deployment**:
-   - Deploy an Apache container and configure it to listen on port 82.
-
-4. **Verification**:
-   - Ensure the playbook runs successfully.
-     >![playbook](https://github.com/user-attachments/assets/d0786f46-a7f0-4fea-a75e-7ff5f9fb18c2)
-
-   - Verify the Apache container is running and listening on the specified port.
-     >![docker_running](https://github.com/user-attachments/assets/0ed7df57-a5ce-49b7-9e21-a74cf5c6cf37)
-
-   - Access the website to confirm it's serving the correct content.
-     >![Website](https://github.com/user-attachments/assets/1eb567cd-b146-48e9-a215-c454d2d03488)
-
-
-5. **Security**:
-   - Encrypt Ansible passwords using `ansible-vault` and reference the encrypted file in the playbook.
-
 ## Summary
 
-This project showcases the automation capabilities of Ansible for server configuration and deployment. Key learnings include role management, template integration, container deployment, and implementing security practices.
+This project demonstrates the use of Ansible to automate the installation and configuration of an Apache web server on a remote server. The automation process is divided into two roles: `pretasks` and `install_apache`. The `pretasks` role installs necessary prerequisites, while the `install_apache` role sets up and starts the Apache container. For enhanced security, sensitive credentials are encrypted using Ansible Vault.
 
-### Lessons Learned
+## Project Struckture
+![projeckt structure](https://github.com/user-attachments/assets/3786999b-6b7e-47fd-a58b-b3456fdaf70f)
 
-- Effective management of Ansible roles.
-- Integration of Jinja2 templates in Ansible roles.
-- Deployment of Docker containers using Ansible.
-- Importance of securing sensitive data with `ansible-vault`.
+### Prerequisites
 
-By completing this project, I have gained valuable skills in automating server setups and ensuring secure configurations using Ansible.
+-   Ansible installed on the local machine.
+-   A remote server with SSH access and docker allready installed.
+-   Encrypted Ansible Vault for secure credential management.
+
+### Roles and Tasks
+
+#### 1. `pretasks` Role
+
+This role ensures all necessary prerequisites are installed on the remote server. It includes:
+
+-   Installation of `python-pip`.
+-   Installation of `git`.
+-   Enabling the EPEL repository for additional packages.
+
+#### 2. `install_apache` Role
+
+This role is responsible for configuring and starting the Apache web server. It includes:
+
+-   Copying the Apache configuration template to the server.
+-   Starting the Apache container to serve the website.
+
+### Playbook Execution
+
+The playbook is executed to run the above roles in sequence, ensuring the Apache web server is set up correctly.
+
+## Steps to Execute the Project
+
+1.  **Setup Ansible Inventory and Configuration:** Ensure your inventory file lists the target remote server(s) and your `ansible.cfg` is correctly configured.
+    
+2.  **Create Encrypted Credentials:** Encrypt the Ansible password using Ansible Vault:
+    
+    Save the encrypted password in a credential file and reference the path in your playbook.
+    
+3.  **Define Roles:**
+    
+    -   `pretasks`:
+        
+    ```bash
+       - name: Install EPEL repo
+   package:
+     name: "{{ item }}"
+     state: present
+   when: ansible_distribution == "CentOS"
+   loop:
+    - epel-release
+    - git
+    - wget
+
+ - name: Download pip script
+   get_url:
+     url: https://bootstrap.pypa.io/pip/2.7/get-pip.py
+     dest: /tmp/get-pip.py
+
+ - name: Install python-pip
+   ansible.builtin.command: python2.7 /tmp/get-pip.py
+
+ - name: Install docker python
+   pip:
+     name: docker-py
+             ```
+        
+    -   `install_apache`:
+        
+  ```bash
+  - name: Copy website file template
+  template:
+    src: index.html.j2
+    dest: "/home/{{ system_user }}/index.html"
+
+- name: Create Apache container
+  docker_container:
+    name: webapp
+    image: httpd
+    ports:
+      - "82:80"
+    volumes:
+      - "/home/{{ system_user }}/index.html:/usr/local/apache2/htdocs/index.html"
+             ```
+        
+4.  **Run the Playbook:** Execute the playbook to apply the roles and tasks:
+    
+    `ansible-playbook -i prod.yml deploy.yml --ask-vault-pass` 
+    
+5.  **Verification:**
+    
+    -   Check that the playbook ran successfully using the provided screenshots.
+  >![playbook](https://github.com/user-attachments/assets/d0786f46-a7f0-4fea-a75e-7ff5f9fb18c2)
+    -   Verify the Apache container is running and listening on port 82.
+   >![docker_running](https://github.com/user-attachments/assets/0ed7df57-a5ce-49b7-9e21-a74cf5c6cf37)
+
+    -   Access the website and ensure it is served correctly.
+ >![Website](https://github.com/user-attachments/assets/1eb567cd-b146-48e9-a215-c454d2d03488)
+
+## Learning Outcomes
+
+-   **Ansible Role Creation:** Understanding the structure and purpose of Ansible roles to modularize the automation tasks.
+-   **Task Automation:** Automating the installation and configuration processes, reducing manual intervention and errors.
+-   **Security Practices:** Implementing secure handling of sensitive information using Ansible Vault.
+-   **Configuration Management:** Managing server configurations using templates for consistent and repeatable setups.
+-   **Service Management:** Automating service management with Ansible to ensure services are running as expected.
+
+## Conclusion
+
+This project showcases the efficient use of Ansible for automating the setup of an Apache web server. By breaking down the tasks into roles, we achieved a clean and maintainable automation process. The inclusion of security practices with Ansible Vault ensures sensitive data is protected, highlighting the importance of secure automation.
