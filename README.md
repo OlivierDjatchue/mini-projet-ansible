@@ -54,7 +54,8 @@ The playbook is executed to run the above roles in sequence, ensuring the Apache
     
     -   `pretasks`:
         
-    ```bash
+```bash
+    
        - name: Install EPEL repo
    package:
      name: "{{ item }}"
@@ -76,11 +77,13 @@ The playbook is executed to run the above roles in sequence, ensuring the Apache
  - name: Install docker python
    pip:
      name: docker-py
-             ```
+   
+   ```
         
     -   `install_apache`:
         
-  ```bash
+```bash
+
   - name: Copy website file template
   template:
     src: index.html.j2
@@ -94,7 +97,7 @@ The playbook is executed to run the above roles in sequence, ensuring the Apache
       - "82:80"
     volumes:
       - "/home/{{ system_user }}/index.html:/usr/local/apache2/htdocs/index.html"
-             ```
+```
         
 4.  **Run the Playbook:** Execute the playbook to apply the roles and tasks:
     
