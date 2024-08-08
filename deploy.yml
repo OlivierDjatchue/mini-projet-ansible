@@ -2,7 +2,8 @@
 - name: Apache installation using docker
   hosts: all
   become: true
-  vars_files: files/secrets/credentials.vault
+  vars_files:
+    -  files/secrets/credentials.vault
 
   roles:
     - pretasks
