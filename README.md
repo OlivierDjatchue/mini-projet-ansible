@@ -52,8 +52,9 @@ The playbook is executed to run the above roles in sequence, ensuring the Apache
     
 3.  **Define Roles:**
     
-    -   `pretasks`:
-        
+
+**`pretasks`:**
+  
 ```bash
     
        - name: Install EPEL repo
@@ -77,10 +78,10 @@ The playbook is executed to run the above roles in sequence, ensuring the Apache
  - name: Install docker python
    pip:
      name: docker-py
-   
-   ```
+   ````
+**`Install_apache`:**
         
-    -   `install_apache`:
+  
         
 ```bash
 
@@ -101,7 +102,9 @@ The playbook is executed to run the above roles in sequence, ensuring the Apache
         
 4.  **Run the Playbook:** Execute the playbook to apply the roles and tasks:
     
-    `ansible-playbook -i prod.yml deploy.yml --ask-vault-pass` 
+    ```bash 
+    ansible-playbook -i prod.yml deploy.yml --ask-vault-pass` 
+    ```
     
 5.  **Verification:**
     
